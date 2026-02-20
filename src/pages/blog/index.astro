@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body class="min-h-screen bg-black text-gray-300">
+		<Header />
+		<main class="max-w-4xl mx-auto px-4 py-8">
+			<section>
+				<ul class="flex flex-wrap gap-8 list-none p-0 m-0">
+					{
+						posts.map((post, index) => (
+							<li
+								class={
+									index === 0
+										? 'w-full mb-4 text-center'
+										: 'w-full md:w-[calc(50%-1rem)] text-center md:text-left'
+								}
+							>
+								<a
+									href={`/blog/${post.id}/`}
+									class="block no-underline transition-colors duration-200 group"
+								>
+									{post.data.heroImage && (
+										<Image
+											width={720}
+											height={360}
+											src={post.data.heroImage}
+											alt=""
+											class="mb-2 rounded-xl w-full max-w-full h-auto group-hover:shadow-lg transition-shadow duration-200"
+										/>
+									)}
+									<h4
+										class={
+											index === 0
+												? 'm-0 text-white leading-tight text-3xl md:text-4xl group-hover:text-amber-500'
+												: 'm-0 text-white leading-tight text-xl group-hover:text-amber-500'
+										}
+									>
+										{post.data.title}
+									</h4>
+									<p class="m-0 text-gray-400 group-hover:text-amber-500 transition-colors duration-200">
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

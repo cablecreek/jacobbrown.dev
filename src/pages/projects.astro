@@ -1,0 +1,37 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import '../styles/global.css';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body class="min-h-screen flex flex-col text-gray-300 bg-gradient-to-br from-amber-950 to-black">
+    <Header />
+    <main class="flex-1 flex flex-col items-center px-6 py-12">
+      <div class="w-full max-w-4xl mx-auto space-y-8">
+        <div class="text-center space-y-2">
+          <h1 class="text-3xl md:text-4xl font-medium text-white">projects</h1>
+          <p class="text-gray-400">things i've built and worked on.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ProjectCard
+            title="GoTH Stack"
+            description="Go + Tailwind + HTMX starter for building server-side rendered apps on AWS Lambda with Echo, templ, and Terraform."
+            href="https://github.com/cablecreek/goth-stack"
+            tech={["Go", "TailwindCSS", "HTMX", "AWS Lambda", "Terraform"]}
+            year="2026"
+            linkText="View on GitHub"
+          />
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

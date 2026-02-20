@@ -1,0 +1,18 @@
+# build output
+dist/
+build/
+out/
+
+# generated types
+.astro/
+.cache/
+.terraform/
+
+*.tsbuildinfo
+# dependencies
+*node_modules*
+
+# file types
+.DS_Store
+
+

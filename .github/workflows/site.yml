@@ -1,0 +1,51 @@
+name: personal site blog
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      # This workflow uses actions that are not certified by GitHub.
+      # They are provided by a third-party and are governed by
+      # separate terms of service, privacy policy, and support
+      # documentation.
+
+      # NOTE: pnpm caching support requires pnpm version >= 6.10.0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+      - run: pnpm install
+      - run: pnpm build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::711387094602:role/GitHubAction-AssumeRoleWithAction
+          aws-region: us-east-1
+
+      - name: Deploy to S3
+        # run: aws s3 sync dist/ s3://jacobbrown.dev/ --dryrun
+        run: aws s3 sync dist/ s3://jacobbrown.dev/ --delete
+
+      - name: Invalidate cdn
+        run: |
+          echo "[TODO] invalidate cnd"
+          CLOUDFRONT_ID="E1QMYEH3NHCQVS"
+          echo invalidating $CLOUDFRONT_ID
+          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*" --no-cli-pager

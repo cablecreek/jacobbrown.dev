@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  href?: string;
+  tech?: string[];
+  year?: string;
+  linkText?: string;
+}
+
+const { title, description, href, tech = [], year, linkText = "View Project" } = Astro.props;
+---
+
+<div class="bg-black/80 group border border-white/10 rounded-lg p-6 hover:border-white/25 hover:bg-white/5 transition-all duration-300">
+  <div class="flex justify-between items-start gap-4 mb-3">
+    <h3 class="text-white font-medium text-lg group-hover:text-amber-400 transition-colors duration-200">
+      {href ? <a href={href} class="hover:underline">{title}</a> : title}
+    </h3>
+    {year && <span class="text-gray-500 text-sm">{year}</span>}
+  </div>
+  
+  <p class="text-gray-400 text-sm text-pretty mb-4">{description}</p>
+  
+  {tech.length > 0 && (
+    <div class="flex flex-wrap gap-2 mb-4">
+      {tech.map((item) => (
+        <span class="text-xs px-2 py-1 rounded bg-white/5 text-gray-400 border border-white/5">
+          {item}
+        </span>
+      ))}
+    </div>
+  )}
+  
+  {href && (
+    <a 
+      href={href}
+      class="inline-flex items-center text-sm text-amber-400 group-hover:text-amber-300 transition-colors"
+    >
+      {linkText} →
+    </a>
+  )}
+</div>
